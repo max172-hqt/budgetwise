@@ -1,0 +1,19 @@
+{
+    "name": "huytran172/budgetwise",
+    "autoload": {
+        "psr-4": {
+            "Budgetwise\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Huy Tran",
+            "email": "huytran172@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/http-foundation": "^6.3",
+        "symfony/http-kernel": "^6.3",
+        "symfony/routing": "^6.3"
+    }
+}
