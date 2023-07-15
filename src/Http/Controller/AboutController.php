@@ -2,13 +2,15 @@
 
 namespace Budgetwise\Http\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use Budgetwise\Core\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class AboutController
+class AboutController extends AbstractController
 {
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        return new Response("About");
+        return $this->render('about/index.html.twig', [
+            'heading' => 'About Us'
+        ]);
     }
 }

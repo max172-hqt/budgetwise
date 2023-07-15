@@ -8,5 +8,5 @@ return function (Router $router) {
     $router->get('/', [HomeController::class, 'index']);
     $router->post('/', [HomeController::class, 'store']);
 
-    $router->get('/about/{id}', [AboutController::class, 'index']);
+    $router->get('/about', [AboutController::class, 'index']);
 };
