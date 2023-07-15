@@ -28,9 +28,9 @@ class Router implements HttpKernelInterface
 
         try {
             $attributes = $matcher->match($request->getPathInfo());
-            $action = $this->getControllerAction($attributes, $request->getMethod());
+            $action = $this->getControllerAction($attributes, $request);
             // Call the controller actions and pass necessary request information and attribute
-            $response = $action($request, $attributes);
+            $response = $action($attributes);
         } catch (ResourceNotFoundException $exception) {
             $response = new Response('Not found!', Response::HTTP_NOT_FOUND);
         }
@@ -87,16 +87,16 @@ class Router implements HttpKernelInterface
 
     /**
      * @param $attributes: Route attributes
-     * @param $method: HTTP Method
+     * @param $request: HTTP Request
      * @return array [controller instance, action]
      *
      * Resolve the controller and get controller action
      */
-    public function getControllerAction($attributes, $method): array
+    public function getControllerAction($attributes, Request $request): array
     {
-        if (isset($attributes[$method])) {
-            $controllerInfo = $attributes[$method];
-            $controllerObj = new $controllerInfo[0];
+        if (isset($attributes[$request->getMethod()])) {
+            $controllerInfo = $attributes[$request->getMethod()];
+            $controllerObj = new $controllerInfo[0]($request);
             $action = $controllerInfo[1];
             return [$controllerObj, $action];
         }

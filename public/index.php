@@ -14,7 +14,8 @@ require base_path('bootstrap.php');
 $request = Request::createFromGlobals();
 $router = new Router();
 
-require base_path('routes.php');
+$routesSetup = require base_path('routes.php');
+$routesSetup($router);
 
 $response = $router->handle($request);
 $response->send();

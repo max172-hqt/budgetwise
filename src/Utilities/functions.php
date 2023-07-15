@@ -1,14 +1,7 @@
 <?php
 
 
-function dd($value) {
-    echo "<pre>";
-    echo $value;
-    echo "</pre>";
-    die();
-}
-
-function base_path($path)
+function base_path($path): string
 {
     return BASE_PATH . $path;
 }
