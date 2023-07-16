@@ -34,7 +34,6 @@ abstract class AbstractController
         $content = $this->renderView($view, $parameters);
         $response ??= new Response();
         $response->setContent($content);
-        dump($parameters);
         return $response;
     }
 }

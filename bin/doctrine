@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
+const BASE_PATH = __DIR__ . '/../';
+require BASE_PATH . 'src/Utilities/functions.php';
+
+require base_path('/vendor/autoload.php');
+require base_path('bootstrap.php');
+
+ConsoleRunner::run(
+    new SingleManagerProvider($entityManager),
+    $commands
+);

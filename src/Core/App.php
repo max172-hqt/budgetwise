@@ -1,8 +1,11 @@
 <?php
 
+
 namespace Budgetwise\Core;
 
+
 use Exception;
+
 
 class App
 {

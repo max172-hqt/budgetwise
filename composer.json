@@ -15,7 +15,11 @@
         "symfony/http-foundation": "^6.3",
         "symfony/http-kernel": "^6.3",
         "symfony/routing": "^6.3",
-        "twig/twig": "^3.6"
+        "twig/twig": "^3.6",
+        "doctrine/orm": "^2.15",
+        "doctrine/dbal": "^3.6",
+        "symfony/yaml": "^6.3",
+        "symfony/cache": "^6.3"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.3"
