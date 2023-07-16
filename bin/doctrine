@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+use Budgetwise\Core\App;
+use Budgetwise\Core\Database;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 
@@ -10,7 +12,8 @@ require BASE_PATH . 'src/Utilities/functions.php';
 require base_path('/vendor/autoload.php');
 require base_path('bootstrap.php');
 
+$db = App::resolve(Database::class);
+
 ConsoleRunner::run(
-    new SingleManagerProvider($entityManager),
-    $commands
+    new SingleManagerProvider($db->entityManager())
 );

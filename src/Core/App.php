@@ -4,9 +4,6 @@
 namespace Budgetwise\Core;
 
 
-use Exception;
-
-
 class App
 {
     protected static Container $container;
@@ -21,9 +18,6 @@ class App
         return static::$container;
     }
 
-    /**
-     * @throws Exception
-     */
     public static function resolve($key)
     {
         return static::$container->resolve($key);

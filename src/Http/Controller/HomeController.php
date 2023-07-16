@@ -3,6 +3,8 @@
 namespace Budgetwise\Http\Controller;
 
 use Budgetwise\Core\AbstractController;
+use Budgetwise\Core\Database;
+use Budgetwise\Entities\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends AbstractController
@@ -15,6 +17,11 @@ class HomeController extends AbstractController
     }
 
     public function store(): Response {
-        return new Response("Post Home");
+        $product = new Product();
+        $product->setName("New Product");
+        $db = $this->container()->resolve(Database::class);
+        $db->persist($product);
+        $db->flush();
+        return new Response($product->name());
     }
 }
