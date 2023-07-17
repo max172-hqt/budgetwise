@@ -9,10 +9,10 @@ const BASE_PATH = __DIR__ . '/../';
 require BASE_PATH . 'src/Utilities/functions.php';
 
 require base_path('/vendor/autoload.php');
-require base_path('bootstrap.php');
+$container = require base_path('bootstrap.php');
 
 $request = Request::createFromGlobals();
-$router = new Router();
+$router = new Router($container);
 
 $routesSetup = require base_path('routes.php');
 $routesSetup($router);

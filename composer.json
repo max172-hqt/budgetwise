@@ -19,7 +19,8 @@
         "doctrine/orm": "^2.15",
         "doctrine/dbal": "^3.6",
         "symfony/yaml": "^6.3",
-        "symfony/cache": "^6.3"
+        "symfony/cache": "^6.3",
+        "php-di/php-di": "^7.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.3"

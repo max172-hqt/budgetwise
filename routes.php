@@ -9,4 +9,5 @@ return function (Router $router) {
     $router->post('/', [HomeController::class, 'store']);
 
     $router->get('/about', [AboutController::class, 'index']);
+    $router->get('/about/{id}/{nice}', [AboutController::class, 'show']);
 };

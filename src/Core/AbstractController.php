@@ -4,33 +4,27 @@
 namespace Budgetwise\Core;
 
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 
 abstract class AbstractController
 {
-    protected Container $container;
-    protected Request $request;
+    protected Environment $twig;
+    protected Database $db;
 
-    public function __construct(Request $request) {
-        $this->container = App::container();
-        $this->request = $request;
-    }
-
-    protected function container(): Container
-    {
-        return $this->container;
+    public function __construct(Environment $twig, Database $db) {
+        $this->twig = $twig;
+        $this->db = $db;
     }
 
     protected function renderView(string $view, array $parameters = []): string
     {
-        $twig = $this->container->resolve('twig');
-        return $twig->render($view, $parameters);
+        return $this->twig->render($view, $parameters);
     }
 
     protected function render(string $view, array $parameters = [], Response $response = null): Response {
-        $parameters['pathInfo'] = $this->request->getPathInfo();
+        $parameters['pathInfo'] = get_path($_SERVER['REQUEST_URI']);
         $content = $this->renderView($view, $parameters);
         $response ??= new Response();
         $response->setContent($content);

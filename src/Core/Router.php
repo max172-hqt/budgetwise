@@ -4,6 +4,7 @@
 namespace Budgetwise\Core;
 
 
+use DI\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -17,9 +18,11 @@ use Symfony\Component\Routing\RouteCollection;
 class Router implements HttpKernelInterface
 {
     protected RouteCollection $routes;
+    protected Container $container;
 
-    public function __construct()
+    public function __construct($container)
     {
+        $this->container = $container;
         $this->routes = new RouteCollection();
     }
 
@@ -31,9 +34,7 @@ class Router implements HttpKernelInterface
 
         try {
             $attributes = $matcher->match($request->getPathInfo());
-            $action = $this->getControllerAction($attributes, $request);
-            // Call the controller actions and pass necessary request information and attribute
-            $response = $action($attributes);
+            $response = $this->triggerAction($attributes, $request);
         } catch (ResourceNotFoundException $exception) {
             $response = new Response('Not found!', Response::HTTP_NOT_FOUND);
         }
@@ -89,19 +90,18 @@ class Router implements HttpKernelInterface
     }
 
     /**
-     * @param $attributes: Route attributes
-     * @param $request: HTTP Request
-     * @return array [controller instance, action]
+     * @param $attributes : Route attributes
+     * @param $request : HTTP Request
+     * @return Response
      *
      * Resolve the controller and get controller action
      */
-    public function getControllerAction($attributes, Request $request): array
+    private function triggerAction($attributes, Request $request): Response
     {
         if (isset($attributes[$request->getMethod()])) {
             $controllerInfo = $attributes[$request->getMethod()];
-            $controllerObj = new $controllerInfo[0]($request);
-            $action = $controllerInfo[1];
-            return [$controllerObj, $action];
+            $attributes['request'] = $request;
+            return $this->container->call($controllerInfo, $attributes);
         }
         throw new ResourceNotFoundException("Resource not found");
     }
