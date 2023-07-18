@@ -16,7 +16,7 @@ return [
 
     Database::class => function () {
         $ormConfig = ORMSetup::createAttributeMetadataConfiguration(
-            paths: array(__DIR__ . "/src"),
+            paths: array(base_path("/src")),
             isDevMode: true,
         );
 

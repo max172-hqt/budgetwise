@@ -1,20 +1,17 @@
 <?php
 
-
 namespace Budgetwise\Http\Controller;
-
 
 use Budgetwise\Core\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
-class AboutController extends AbstractController
+class SessionController extends AbstractController
 {
-    public function index($request): Response
+    public function index(Request $request): Response
     {
-        return $this->render('about/index.html.twig', [
-            'heading' => 'About Us'
+        return $this->render('session/create.html.twig', [
+            'heading' => 'Log In',
         ]);
     }
 }

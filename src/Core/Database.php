@@ -26,4 +26,10 @@ class Database
     {
         $this->entityManager->flush();
     }
+
+    public function persistAndFlush($obj)
+    {
+        $this->persist($obj);
+        $this->flush();
+    }
 }
