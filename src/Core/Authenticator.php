@@ -11,7 +11,7 @@ class Authenticator
 {
     protected array $errors = [];
 
-    public function __construct(private Database $db, private Session $session)
+    public function __construct(private readonly Database $db, private readonly Session $session)
     {
     }
 

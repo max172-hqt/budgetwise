@@ -8,11 +8,10 @@ use Budgetwise\Http\Controller\SessionController;
 
 return function (Router $router) {
     $router->get('/', [HomeController::class, 'index']);
-
     $router->get('/about', [AboutController::class, 'index']);
 
-    $router->get('/registration', [RegistrationController::class, 'index']);
-    $router->post('/registration', [RegistrationController::class, 'store']);
+    $router->get('/registration', [RegistrationController::class, 'index', 'guest']);
+    $router->post('/registration', [RegistrationController::class, 'store', 'guest']);
 
-    $router->get('/login', [SessionController::class, 'index']);
+    $router->get('/login', [SessionController::class, 'index', 'guest']);
 };

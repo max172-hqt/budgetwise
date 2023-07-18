@@ -3,14 +3,18 @@
 namespace Budgetwise\Http\Controller;
 
 use Budgetwise\Core\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends AbstractController
 {
-    public function index($request): Response {
+    public function index(Request $request): Response
+    {
+        $user = $request->getSession()->get('user');
+
         return $this->render('home/index.html.twig', [
             'heading' => 'Your Trips',
-            'name' => 'Huy Tran',
+            'email' => $user ? $user['email'] : 'Guest'
         ]);
     }
 }

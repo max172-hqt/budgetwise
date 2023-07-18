@@ -13,12 +13,15 @@ use Twig\Environment;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(Environment $twig, Database $db, private readonly Authenticator $authenticator)
+    private readonly Authenticator $authenticator;
+
+    public function __construct(Environment $twig, Database $db, Request $request, Authenticator $authenticator)
     {
-        parent::__construct($twig, $db);
+        parent::__construct($twig, $db, $request);
+        $this->authenticator = $authenticator;
     }
 
-    public function index(Request $request): Response
+    public function index(): Response
     {
         return $this->render('registration/create.html.twig', [
             'heading' => 'Sign Up',

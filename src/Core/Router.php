@@ -4,6 +4,7 @@
 namespace Budgetwise\Core;
 
 
+use Budgetwise\Middleware\Middleware;
 use DI\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,8 +101,18 @@ class Router implements HttpKernelInterface
     {
         if (isset($attributes[$request->getMethod()])) {
             $controllerInfo = $attributes[$request->getMethod()];
+            $className = $controllerInfo[0];
+            $action = $controllerInfo[1];
+
+            if (count($controllerInfo) === 3) {
+                $middleware = $controllerInfo[2];
+                $response = Middleware::resolve($middleware, $request);
+                if ($response) return $response;
+            }
+
             $attributes['request'] = $request;
-            return $this->container->call($controllerInfo, $attributes);
+            $controller = $this->container->make($className, [ 'request' => $request ]);
+            return $this->container->call([$controller, $action], $attributes);
         }
         throw new ResourceNotFoundException("Resource not found");
     }
