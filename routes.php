@@ -14,4 +14,6 @@ return function (Router $router) {
     $router->post('/registration', [RegistrationController::class, 'store', 'guest']);
 
     $router->get('/login', [SessionController::class, 'index', 'guest']);
+    $router->post('/session', [SessionController::class, 'store', 'guest']);
+    $router->delete('/session', [SessionController::class, 'destroy', 'auth']);
 };

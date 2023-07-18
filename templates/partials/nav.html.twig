@@ -1,8 +1,9 @@
 {% set paths = [
-    { name: 'Home', path: "/" },
-    { name: 'About', path: "/about" },
-    { name: 'Log In', path: "/login" },
-    { name: 'Sign Up', path: "/registration" },
+    { name: 'Home', path: "/", show: true },
+    { name: 'About', path: "/about", show: true },
+    { name: 'Log In', path: "/login", show: not isLoggedIn },
+    { name: 'Sign Up', path: "/registration", show: not isLoggedIn },
+    { name: 'Log Out', path: "/session", show: isLoggedIn },
 ] %}
 
 <nav class="bg-gray-800">
@@ -14,9 +15,21 @@
             <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
                     {% for path in paths %}
-                        <a href="{{ path.path }}"
-                           class="{{ path.path == pathInfo ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"
-                           aria-current="page">{{ path.name }}</a>
+                        {% if path.show == true %}
+                            {% if path.path == '/session' %}
+                                <form method="POST" action="/session">
+                                    <input type="hidden" name="_method" value="DELETE"/>
+                                    <button
+                                            class="{{ path.path == pathInfo ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"
+                                    >Log Out
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="{{ path.path }}"
+                                   class="{{ path.path == pathInfo ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"
+                                   aria-current="page">{{ path.name }}</a>
+                            {% endif %}
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

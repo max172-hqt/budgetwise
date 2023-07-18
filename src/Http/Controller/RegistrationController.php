@@ -4,23 +4,13 @@ namespace Budgetwise\Http\Controller;
 
 use Budgetwise\Core\AbstractController;
 use Budgetwise\Core\Authenticator;
-use Budgetwise\Core\Database;
 use Budgetwise\Entities\User;
 use Budgetwise\Http\Forms\RegistrationForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
 class RegistrationController extends AbstractController
 {
-    private readonly Authenticator $authenticator;
-
-    public function __construct(Environment $twig, Database $db, Request $request, Authenticator $authenticator)
-    {
-        parent::__construct($twig, $db, $request);
-        $this->authenticator = $authenticator;
-    }
-
     public function index(): Response
     {
         return $this->render('registration/create.html.twig', [
@@ -28,7 +18,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    public function store(Request $request): Response
+    public function store(Request $request, Authenticator $authenticator): Response
     {
         $email = $request->request->get('email');
         $password = $request->request->get('password');
@@ -48,7 +38,7 @@ class RegistrationController extends AbstractController
         $user->setEmail($email);
         $user->setPassword($password);
 
-        $existed = $this->authenticator->exists($email, $password);
+        $existed = $authenticator->exists($email, $password);
 
         if ($existed) {
             $form->setErrors('email', 'Email is already registered. Please try again.');
@@ -61,7 +51,7 @@ class RegistrationController extends AbstractController
         }
 
         $this->db->persistAndFlush($user);
-        $this->authenticator->attempt($email, $password);
+        $authenticator->attempt($email, $password);
 
         return $this->redirect();
     }

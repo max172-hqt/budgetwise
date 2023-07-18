@@ -1,13 +1,9 @@
 <?php
 
-
 namespace Budgetwise\Http\Controller;
 
-
 use Budgetwise\Core\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 
 class AboutController extends AbstractController
 {

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Budgetwise\Core;
-
 
 use Budgetwise\Middleware\Middleware;
 use DI\Container;
@@ -14,7 +12,6 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-
 
 class Router implements HttpKernelInterface
 {
@@ -100,7 +97,10 @@ class Router implements HttpKernelInterface
     private function triggerAction($attributes, Request $request): Response
     {
         if (isset($attributes[$request->getMethod()])) {
-            $controllerInfo = $attributes[$request->getMethod()];
+            // Simulate methods other than GET and POST
+            $requestMethod = $request->get('_method') ?? $request->getMethod();
+
+            $controllerInfo = $attributes[$requestMethod];
             $className = $controllerInfo[0];
             $action = $controllerInfo[1];
 

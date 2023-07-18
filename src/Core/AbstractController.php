@@ -1,14 +1,14 @@
 <?php
 
-
 namespace Budgetwise\Core;
-
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
-
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 abstract class AbstractController
 {
@@ -23,6 +23,11 @@ abstract class AbstractController
         $this->request = $request;
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     protected function renderView(string $view, array $parameters = []): string
     {
         return $this->twig->render($view, $parameters);
@@ -31,8 +36,8 @@ abstract class AbstractController
     protected function render(string $view, array $parameters = [], Response $response = null): Response
     {
         $parameters['pathInfo'] = $this->request->getPathInfo();
-        $parameters['isLoggedIn'] = (bool)$this->request->getSession()->get('users');
-        $parameters['user'] = $this->request->getSession()->get('users') ?? null;
+        $parameters['isLoggedIn'] = (bool)$this->request->getSession()->get('user');
+        $parameters['user'] = $this->request->getSession()->get('user') ?? null;
 
         $content = $this->renderView($view, $parameters);
         $response ??= new Response();

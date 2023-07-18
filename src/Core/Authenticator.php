@@ -43,6 +43,11 @@ class Authenticator
         ]);
     }
 
+    public function logout()
+    {
+        $this->session->invalidate();
+    }
+
     /**
      * @return array
      */
