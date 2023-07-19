@@ -2,10 +2,19 @@
 
 namespace Budgetwise\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'users')]
+/**
+ * User table
+ * id: integer
+ * email: string
+ * password: string, hashed
+ */
 class User
 {
     #[ORM\Id]
@@ -18,6 +27,19 @@ class User
 
     #[ORM\Column(type: 'string')]
     private string $password;
+
+    /**
+     * Many Users have Many Trips.
+     * @var Collection<int, Trip>
+     */
+    #[ManyToMany(targetEntity: Trip::class, mappedBy: 'users')]
+    private Collection $trips;
+
+    public function __construct()
+    {
+        $this->trips = new ArrayCollection();
+    }
+
     /**
      * @return int
      */
@@ -57,4 +79,26 @@ class User
     {
         $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
+
+    /**
+     * @return Collection
+     */
+    public function getTrips(): Collection
+    {
+        return $this->trips;
+    }
+
+    /**
+     * @param Collection $trips
+     */
+    public function setTrips(Collection $trips): void
+    {
+        $this->trips = $trips;
+    }
+
+    public function addTrip(Trip $trip): void
+    {
+        $this->trips[] = $trip;
+    }
+
 }
