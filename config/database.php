@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     'sqlite' => [
         'driver' => 'pdo_sqlite',

@@ -1,12 +1,10 @@
 <?php
 
-
 use Budgetwise\Core\Database;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\ORMSetup;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-
 
 return [
     Environment::class => function () {
