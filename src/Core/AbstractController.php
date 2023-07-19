@@ -2,6 +2,8 @@
 
 namespace Budgetwise\Core;
 
+use Budgetwise\Entities\User;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +39,7 @@ abstract class AbstractController
     {
         $parameters['pathInfo'] = $this->request->getPathInfo();
         $parameters['isLoggedIn'] = (bool)$this->request->getSession()->get('user');
-        $parameters['user'] = $this->request->getSession()->get('user') ?? null;
+        $parameters['currentUser'] = $this->request->getSession()->get('user') ?? null;
 
         $content = $this->renderView($view, $parameters);
         $response ??= new Response();
@@ -48,5 +50,22 @@ abstract class AbstractController
     protected function redirect($path = '/'): RedirectResponse
     {
         return new RedirectResponse('/');
+    }
+
+    protected function entityManager(): EntityManager
+    {
+        return $this->db->entityManager();
+    }
+
+    protected function getCurrentUser(): ?User {
+        $user = $this->request->getSession()->get('user');
+
+        if (!$user) {
+            return null;
+        }
+
+        return $this->entityManager()->getRepository(User::class)->findOneBy([
+            'email' => $user['email']
+        ]);
     }
 }

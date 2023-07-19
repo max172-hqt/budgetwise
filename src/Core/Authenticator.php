@@ -36,14 +36,14 @@ class Authenticator
         ]);
     }
 
-    public function login(User $user)
+    public function login(User $user): void
     {
         $this->session->set('user', [
             'email' => $user->getEmail()
         ]);
     }
 
-    public function logout()
+    public function logout(): void
     {
         $this->session->invalidate();
     }

@@ -106,6 +106,7 @@ class Router implements HttpKernelInterface
 
             if (count($controllerInfo) === 3) {
                 $middleware = $controllerInfo[2];
+                // TODO: Ability to chain middlewares
                 $response = Middleware::resolve($middleware, $request);
                 if ($response) return $response;
             }

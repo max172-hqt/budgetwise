@@ -1,0 +1,33 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <div>
+        {% if isLoggedIn %}
+            <div class="mb-6">
+                <a href="/trips/create" class="text-white bg-gray-700 hover:bg-gray-800 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Create a New Trip</a>
+            </div>
+            {% if trips|length == 0 %}
+                <h1>You have no trip.</h1>
+            {% endif %}
+            <ul role="list" class="divide-y divide-gray-100">
+                {% for trip in trips %}
+                    <a class="flex justify-between gap-x-6 py-5 px-4 bg-white" href="/trips/{{ trip.id }}">
+                        <div class="flex gap-x-4">
+                            <div class="min-w-0 flex-auto">
+                                <p class="text-sm font-semibold leading-6 text-gray-900">{{ trip.name }}</p>
+                                <p class="mt-1 truncate text-xs leading-5 text-gray-500">You own $233</p>
+                            </div>
+                        </div>
+                        <div class="hidden sm:flex sm:flex-col sm:items-end">
+                            <p class="text-sm leading-6 text-gray-900">{{ trip.users|length }} Member(s)</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h1>Hello Guest, Please login.</h1>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

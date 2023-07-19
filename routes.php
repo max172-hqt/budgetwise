@@ -2,12 +2,16 @@
 
 use Budgetwise\Core\Router;
 use Budgetwise\Http\Controller\AboutController;
-use Budgetwise\Http\Controller\HomeController;
+use Budgetwise\Http\Controller\TripController;
 use Budgetwise\Http\Controller\RegistrationController;
 use Budgetwise\Http\Controller\SessionController;
 
 return function (Router $router) {
-    $router->get('/', [HomeController::class, 'index']);
+    $router->get('/', [TripController::class, 'index']);
+    $router->get('/trips/create', [TripController::class, 'create', 'auth']);
+    $router->get('/trips/{id}', [TripController::class, 'show', 'auth']);
+    $router->post('/trips', [TripController::class, 'store', 'auth']);
+
     $router->get('/about', [AboutController::class, 'index']);
 
     $router->get('/registration', [RegistrationController::class, 'index', 'guest']);
