@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\OneToMany;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'users')]
@@ -35,9 +36,18 @@ class User
     #[ManyToMany(targetEntity: Trip::class, mappedBy: 'users')]
     private Collection $trips;
 
+    /**
+     * One user can have many transaction, so users are inversed side
+     * @var Collection
+     */
+    #[OneToMany(mappedBy: 'users', targetEntity: Transaction::class)]
+    private Collection $transactions;
+
+
     public function __construct()
     {
         $this->trips = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
     }
 
     /**
@@ -101,4 +111,25 @@ class User
         $this->trips[] = $trip;
     }
 
+    /**
+     * @param Collection $transactions
+     */
+    public function setTransactions(Collection $transactions): void
+    {
+        $this->transactions = $transactions;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+
+    public function addTransaction(Transaction $transaction): void
+    {
+        $this->transactions[] = $transaction;
+    }
 }

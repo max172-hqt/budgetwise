@@ -5,6 +5,7 @@ namespace Budgetwise\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToMany;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'trips')]
@@ -33,9 +34,17 @@ class Trip
     #[ORM\JoinTable(name: 'trips_users')]
     private Collection $users;
 
+    /**
+     * One trip can have many transaction, so users are inversed side
+     * @var Collection
+     */
+    #[OneToMany(mappedBy: 'trips', targetEntity: Transaction::class)]
+    private Collection $transactions;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
     }
 
     /**
@@ -91,5 +100,26 @@ class Trip
     {
         $user->addTrip($this); // synchronously update the inverse side
         $this->users[] = $user;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * @param Collection $transactions
+     */
+    public function setTransactions(Collection $transactions): void
+    {
+        $this->transactions = $transactions;
+    }
+
+    public function addTransaction(Transaction $transaction): void
+    {
+        $this->transactions[] = $transaction;
     }
 }
