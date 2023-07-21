@@ -13,16 +13,15 @@ class TripController extends AbstractController
 {
     public function index(Request $request): Response
     {
-        $user = $request->getSession()->get('user');
+        $currentUser = $this->getCurrentUser();
 
-        if (!$user) {
+        if (!$currentUser) {
+            $request->getSession()->invalidate();
             return $this->render('trip/index.html.twig', [
                 'heading' => 'My Trips',
                 'email' =>  'Guest',
             ]);
         }
-
-        $currentUser = $this->getCurrentUser();
 
         return $this->render('trip/index.html.twig', [
             'heading' => 'My Trips',
