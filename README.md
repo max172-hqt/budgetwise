@@ -8,6 +8,9 @@
 This application is built up from scratch with Composer autoload features and various PHP packages
 for the learning purpose of backend-dev with PHP.
 
+## Screenshots
+<img width="1464" alt="Screenshot 2023-07-21 at 6 33 40 PM" src="https://github.com/max172-hqt/budgetwise/assets/55776151/bd34c00f-ceeb-436f-b927-1776ab831a32">
+
 ## Project Libraries
 - `symfony/http-kernel`
   - Main application shell (See `Router.php`), processing requests and produce responses
