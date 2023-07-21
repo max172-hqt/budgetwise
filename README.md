@@ -29,13 +29,15 @@ config/database.php
 
 ```
 composer install
-php -S localhost:8000 -t public/
 
 # Database initialization with doctrine ORM
 php bin/doctrine orm:schema-tool:update -f --dump-sql
 
 # Execute fixtures to produce some fake data
 php bin/execute_fixture.php
+
+# Run local server
+php -S localhost:8000 -t public/
 ```
 
 ## Database Design
