@@ -1,4 +1,42 @@
-# Introduction
+<p align="center">
+  BudgetWise is a small PHP web application to track expenses and debts
+  quickly within a trip with your friends - A clone of SplitWise
+</p>
+
+## Introduction
+
+This application is built up from scratch with Composer autoload features and various PHP packages
+for the learning purpose of backend-dev with PHP.
+
+## Project Libraries
+- `symfony/http-kernel`
+  - Main application shell (See `Router.php`), processing requests and produce responses
+- `symfony/http-foundation`
+  - Sensible wrapper around PHP globals such as `$_GET`, `$_POST`, `$_SERVER` with `Request` object
+- `twig/twig`
+  - Template library
+- `doctrine ORM`
+  - Database stuff
+- `php-di/php-di`
+  - Service container and handle dependency injections (see different Controller class and `bootstrap.php`)
+- `moneyphp/money`
+  - Library for monetary calculation
+
+## Installation
+
+- By default, the application uses sqlite, feel free to load you own db configuration using in
+config/database.php
+
+```
+composer install
+php -S localhost:8000 -t public/
+
+# Database initialization with doctrine ORM
+php bin/doctrine orm:schema-tool:update -f --dump-sql
+
+# Execute fixtures to produce some fake data
+php bin/execute_fixture.php
+```
 
 ## Database Design
 
@@ -14,8 +52,13 @@
   - amount
   - currency
 
-### Relationships
+### Table Relationships
 - One user can belong to many trips
 - One trip can have many users
 - One trip can have many transactions
 - One transaction belongs to one user
+
+## Disclaimer
+- This project is for my learning purpose of PHP to see how different pieces are glued together. 
+And it could be helpful to someone who wants to see how to set up a PHP projects 
+from scratch with composer and standalone libraries. Therefore, it's not ready for production.
