@@ -45,12 +45,14 @@ class TripController extends AbstractController
         }
 
         $calculation = new BudgetCalculation($trip);
+        $calculation->resolvedTable();
 
         return $this->render('trip/show.html.twig', [
             'heading' => $trip->getName(),
             'trip' => $trip,
             'transactions' => $trip->getTransactions(),
-            'budgetTable' => $calculation->budgetTable()
+            'budgetTable' => $calculation->budgetTable(),
+            'resolvedTable' => $calculation->resolvedTable(),
         ]);
     }
 

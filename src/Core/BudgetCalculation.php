@@ -52,35 +52,89 @@ class BudgetCalculation
         return $total;
     }
 
+    /**
+     * Get the contribution that each member must make
+     * @return Money
+     */
     public function getContribution(): Money
     {
         return $this->getTotalCost()->divide($this->users()->count());
     }
 
     /**
-     * @return array<string, Money>
+     * @return array
      */
     public function budgetTable(): array
     {
         $table = [];
 
+        foreach ($this->users() as $user) {
+            $table[$user->getEmail()] = [
+                'total_pay' => Money::USD(0)
+            ];
+        }
+
         foreach ($this->transactions() as $transaction) {
             $email = $transaction->getUser()->getEmail();
-            if (!isset($table[$email])) {
-                $table[$email] = [
-                    'total_pay' => $transaction->getAmount()
-                ];
-            } else {
-                $table[$email] = [
-                    'total_pay' => $table[$email]['total_pay']->add($transaction->getAmount())
-                ];
-            }
+            $table[$email] = [
+                'total_pay' => $table[$email]['total_pay']->add($transaction->getAmount())
+            ];
         }
 
         foreach ($table as $email => $info) {
             $table[$email]['own'] = $info['total_pay']->subtract($this->getContribution());
         }
 
-        return $table;
+        $res = [];
+
+        foreach ($table as $email => $props) {
+            $res[] = [
+                'email' => $email,
+                ...$props,
+            ];
+        }
+
+        return $res;
+    }
+
+    public function resolvedTable(): array
+    {
+        $table = $this->budgetTable();
+
+        // Sort by the 'own' property, those who owe most will come first
+        usort($table, function ($a, $b) {
+            return $a['own']->compare($b['own']);
+        });
+
+        $start = 0;
+        $end = count($table) - 1;
+
+        $resolveTable = [];
+
+        while ($start < $end) {
+            dump($resolveTable);
+            $owe = $table[$start]['own'];
+            $own = $table[$end]['own'];
+
+            $oweAbs = $owe->absolute();
+            $ownAbs = $own->absolute();
+
+            $amount = Money::min($oweAbs, $ownAbs);
+
+            $table[$start]['own'] = $table[$start]['own']->add($amount);
+            $table[$end]['own'] = $table[$end]['own']->subtract($amount);
+
+            $resolveTable[$table[$start]['email']][$table[$end]['email']] = $amount;
+
+            if ($table[$start]['own']->isZero() || $table[$start]['own']->isPositive()) {
+                $start++;
+            }
+
+            if ($table[$end]['own']->isZero() || $table[$end]['own']->isNegative()) {
+                $end--;
+            }
+        }
+
+        return $resolveTable;
     }
 }

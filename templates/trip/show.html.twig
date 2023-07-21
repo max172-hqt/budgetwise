@@ -11,7 +11,7 @@
                             <div class="min-w-0 flex-auto">
                                 <p class="text-sm font-semibold leading-6 text-gray-900">{{ transaction.name }}</p>
                                 <p class="mt-1 truncate text-xs leading-5 text-gray-500">Paid
-                                    by {{ transaction.user.email }}</p>
+                                    by {{ transaction.user.email == currentUser.email ? 'You' : transaction.user.email }}</p>
                             </div>
                         </div>
                         <div class="hidden sm:flex sm:flex-col sm:items-end">
@@ -23,18 +23,26 @@
         </div>
         <div class="flex flex-grow gap-4 flex-col">
             <h1 class="text-xl font-bold">Members</h1>
-            {% for email, props in budgetTable %}
+            {% for user in budgetTable %}
                 <details>
                     <summary class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer bg-white px-4 py-2">
-                        {{ email }}
-                        {% if props.own.isNegative %}
-                            <span class="text-red-500 float-right">Owe: {{ props.own.absolute|format_money }}</span>
+                        {{ user.email == currentUser.email ? 'You' : user.email }}
+                        {% if user.own.isNegative %}
+                            <span class="text-red-500 float-right">Owes: {{ user.own.absolute|format_money }}</span>
                         {% else %}
-                            <span class="text-green-500 float-right">Own: {{ props.own.absolute|format_money }}</span>
+                            <span class="text-green-500 float-right">Receives: {{ user.own.absolute|format_money }}</span>
                         {% endif %}
                     </summary>
                     <div class=" bg-white">
-                        <p class="leading-6 px-3 py-2 text-gray-800">TODO</p>
+                        {% if resolvedTable[user.email] is empty %}
+                            <p class="leading-6 px-3 py-2 text-gray-800 text-sm">No debt</p>
+                        {% else %}
+                            {% for email, amount in resolvedTable[user.email] %}
+                                <p class="leading-6 px-3 py-2 text-gray-800 text-sm">
+                                    Pay {{ email == currentUser.email ? 'you' : email }}
+                                    <span class="text-red-500 font-bold">{{ amount|format_money }}</span></p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </details>
             {% endfor %}
