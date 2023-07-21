@@ -11,7 +11,7 @@ require BASE_PATH . 'src/Utilities/functions.php';
 require base_path('/vendor/autoload.php');
 require base_path('bootstrap.php');
 
-$loader = require base_path('src/Entities/Fixtures/loader.php');
+$loader = require base_path('src/Fixtures/loader.php');
 $db = $container->get(Database::class);
 
 $executor = new ORMExecutor($db->entityManager(), new ORMPurger());

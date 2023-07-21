@@ -37,7 +37,8 @@ class Authenticator
     public function login(User $user): void
     {
         $this->session->set('user', [
-            'email' => $user->getEmail()
+            'email' => $user->getEmail(),
+            'name' => $user->getName()
         ]);
     }
 

@@ -49,6 +49,7 @@ class TripController extends AbstractController
         return $this->render('trip/show.html.twig', [
             'heading' => $trip->getName(),
             'trip' => $trip,
+            'total_expense' => $calculation->getTotalCost(),
             'transactions' => $trip->getTransactions(),
             'budgetTable' => $calculation->budgetTable(),
             'resolvedTable' => $calculation->resolvedTable(),

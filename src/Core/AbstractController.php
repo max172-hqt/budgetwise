@@ -49,7 +49,7 @@ abstract class AbstractController
 
     protected function redirect($path = '/'): RedirectResponse
     {
-        return new RedirectResponse('/');
+        return new RedirectResponse($path);
     }
 
     protected function entityManager(): EntityManager
@@ -64,8 +64,10 @@ abstract class AbstractController
             return null;
         }
 
-        return $this->entityManager()->getRepository(User::class)->findOneBy([
+        $dbUser = $this->entityManager()->getRepository(User::class)->findOneBy([
             'email' => $user['email']
         ]);
+
+        return $dbUser;
     }
 }

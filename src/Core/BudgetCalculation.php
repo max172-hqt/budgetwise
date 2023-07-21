@@ -70,15 +70,14 @@ class BudgetCalculation
 
         foreach ($this->users() as $user) {
             $table[$user->getEmail()] = [
+                'name' => $user->getName(),
                 'total_pay' => Money::USD(0)
             ];
         }
 
         foreach ($this->transactions() as $transaction) {
             $email = $transaction->getUser()->getEmail();
-            $table[$email] = [
-                'total_pay' => $table[$email]['total_pay']->add($transaction->getAmount())
-            ];
+            $table[$email]['total_pay'] = $table[$email]['total_pay']->add($transaction->getAmount());
         }
 
         foreach ($table as $email => $info) {
@@ -93,6 +92,7 @@ class BudgetCalculation
                 ...$props,
             ];
         }
+
 
         return $res;
     }
@@ -118,19 +118,25 @@ class BudgetCalculation
             $oweAbs = $owe->absolute();
             $ownAbs = $own->absolute();
 
-            $amount = Money::min($oweAbs, $ownAbs);
-
-            $table[$start]['own'] = $table[$start]['own']->add($amount);
-            $table[$end]['own'] = $table[$end]['own']->subtract($amount);
-
-            $resolveTable[$table[$start]['email']][$table[$end]['email']] = $amount;
-
-            if ($table[$start]['own']->isZero() || $table[$start]['own']->isPositive()) {
+            if ($oweAbs->isZero()) {
                 $start++;
-            }
-
-            if ($table[$end]['own']->isZero() || $table[$end]['own']->isNegative()) {
+            } else if ($ownAbs->isZero()) {
                 $end--;
+            } else {
+                $amount = Money::min($oweAbs, $ownAbs);
+
+                $table[$start]['own'] = $table[$start]['own']->add($amount);
+                $table[$end]['own'] = $table[$end]['own']->subtract($amount);
+
+                $resolveTable[$table[$start]['email']][$table[$end]['name']] = $amount;
+
+                if ($table[$start]['own']->isZero() || $table[$start]['own']->isPositive()) {
+                    $start++;
+                }
+
+                if ($table[$end]['own']->isZero() || $table[$end]['own']->isNegative()) {
+                    $end--;
+                }
             }
         }
 

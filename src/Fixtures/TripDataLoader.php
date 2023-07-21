@@ -1,6 +1,6 @@
 <?php
 
-namespace Budgetwise\Entities\Fixtures;
+namespace Budgetwise\Fixtures;
 
 use Budgetwise\Entities\Trip;
 use Doctrine\Common\DataFixtures\AbstractFixture;
