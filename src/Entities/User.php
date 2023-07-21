@@ -26,6 +26,9 @@ class User
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $email;
 
+    #[ORM\Column(type: 'string', length: 180)]
+    private string $name;
+
     #[ORM\Column(type: 'string')]
     private string $password;
 
@@ -131,5 +134,21 @@ class User
     public function addTransaction(Transaction $transaction): void
     {
         $this->transactions[] = $transaction;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 }

@@ -88,10 +88,14 @@ class Trip
     }
 
     /**
-     * @param Collection $users
+     * @param Collection<int, User> $users
      */
     public function setUsers(Collection $users): void
     {
+        foreach ($users->toArray() as $user) {
+            $user->addTrip($this);
+        }
+
         $this->users = $users;
     }
 

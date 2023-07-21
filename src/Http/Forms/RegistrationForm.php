@@ -8,10 +8,14 @@ class RegistrationForm
 {
     private array $errors = [];
 
-    public function __construct($email, $password)
+    public function __construct($name, $email, $password)
     {
+        if (! Validator::string($name, min: 1, max: 180)) {
+            $this->errors['email'] = "Please provide a valid name";
+        }
+
         if (! Validator::email($email)) {
-            $this->errors['email'] = "Please provide valid email address";
+            $this->errors['email'] = "Please provide a valid email address";
         }
 
         if (! Validator::string($password, 8, 255)) {

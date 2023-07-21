@@ -25,6 +25,7 @@
         "ext-intl": "*"
     },
     "require-dev": {
-        "symfony/var-dumper": "^6.3"
+        "symfony/var-dumper": "^6.3",
+        "doctrine/data-fixtures": "^1.6"
     }
 }

@@ -20,14 +20,16 @@ class RegistrationController extends AbstractController
 
     public function store(Request $request, Authenticator $authenticator): Response
     {
+        $name = $request->request->get('name');
         $email = $request->request->get('email');
         $password = $request->request->get('password');
 
-        $form = new RegistrationForm($email, $password);
+        $form = new RegistrationForm($name, $email, $password);
 
         if (!$form->isValid()) {
             return $this->render('registration/create.html.twig', [
                 'heading' => 'Sign Up',
+                'name' => $name,
                 'email' => $email,
                 'password' => $password,
                 'errors' => $form->getErrors(),
@@ -35,6 +37,7 @@ class RegistrationController extends AbstractController
         }
 
         $user = new User();
+        $user->setName($name);
         $user->setEmail($email);
         $user->setPassword($password);
 
@@ -44,6 +47,7 @@ class RegistrationController extends AbstractController
             $form->setErrors('email', 'Email is already registered. Please try again.');
             return $this->render('registration/create.html.twig', [
                 'heading' => 'Sign Up',
+                'name' => $name,
                 'email' => $email,
                 'password' => $password,
                 'errors' => $form->getErrors(),
