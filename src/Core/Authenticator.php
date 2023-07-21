@@ -3,9 +3,7 @@
 namespace Budgetwise\Core;
 
 use Budgetwise\Entities\User;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Authenticator
 {
@@ -21,7 +19,7 @@ class Authenticator
             'email' => $email
         ]);
 
-        if (!$user || !password_verify($password, $user->getPassword())) {
+        if (!$user || !$user->isPasswordMatched($password)) {
             return false;
         }
 
@@ -29,7 +27,7 @@ class Authenticator
         return true;
     }
 
-    public function exists($email, $password): bool
+    public function exists($email): bool
     {
         return !!$this->db->entityManager()->getRepository(User::class)->findOneBy([
             'email' => $email

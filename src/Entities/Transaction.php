@@ -67,11 +67,11 @@ class Transaction
     }
 
     /**
-     * @return string
+     * @return Money
      */
-    public function getAmount(): string
+    public function getAmount(): Money
     {
-        return $this->amount;
+        return Money::USD($this->amount);
     }
 
     /**

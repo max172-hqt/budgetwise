@@ -40,7 +40,7 @@ class User
      * One user can have many transaction, so users are inversed side
      * @var Collection
      */
-    #[OneToMany(mappedBy: 'users', targetEntity: Transaction::class)]
+    #[OneToMany(mappedBy: 'user', targetEntity: Transaction::class)]
     private Collection $transactions;
 
 
@@ -75,11 +75,12 @@ class User
     }
 
     /**
-     * @return string
+     * @param $password string password to check against
+     * @return bool
      */
-    public function getPassword(): string
+    public function isPasswordMatched(string $password): bool
     {
-        return $this->password;
+        return password_verify($password, $this->password);
     }
 
     /**
@@ -126,7 +127,6 @@ class User
     {
         return $this->transactions;
     }
-
 
     public function addTransaction(Transaction $transaction): void
     {

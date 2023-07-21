@@ -1,5 +1,44 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <h1>Show</h1>
+    <div class="flex gap-8">
+        <div class="flex flex gap-4 flex-col">
+            <h1 class="text-xl font-bold">Trip Transactions</h1>
+            <ul role="list" class="divide-y divide-gray-100 bg-white">
+                {% for transaction in transactions %}
+                    <div class="flex justify-between gap-x-6 py-5 px-4">
+                        <div class="flex gap-x-4">
+                            <div class="min-w-0 flex-auto">
+                                <p class="text-sm font-semibold leading-6 text-gray-900">{{ transaction.name }}</p>
+                                <p class="mt-1 truncate text-xs leading-5 text-gray-500">Paid
+                                    by {{ transaction.user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="hidden sm:flex sm:flex-col sm:items-end">
+                            <p class="text-sm leading-6 text-gray-900">{{ transaction.amount|format_money }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="flex flex-grow gap-4 flex-col">
+            <h1 class="text-xl font-bold">Members</h1>
+            {% for email, props in budgetTable %}
+                <details>
+                    <summary class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer bg-white px-4 py-2">
+                        {{ email }}
+                        {% if props.own.isNegative %}
+                            <span class="text-red-500 float-right">Owe: {{ props.own.absolute|format_money }}</span>
+                        {% else %}
+                            <span class="text-green-500 float-right">Own: {{ props.own.absolute|format_money }}</span>
+                        {% endif %}
+                    </summary>
+                    <div class=" bg-white">
+                        <p class="leading-6 px-3 py-2 text-gray-800">TODO</p>
+                    </div>
+                </details>
+            {% endfor %}
+
+        </div>
+    </div>
 {% endblock %}

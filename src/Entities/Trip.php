@@ -38,7 +38,7 @@ class Trip
      * One trip can have many transaction, so users are inversed side
      * @var Collection
      */
-    #[OneToMany(mappedBy: 'trips', targetEntity: Transaction::class)]
+    #[OneToMany(mappedBy: 'trip', targetEntity: Transaction::class)]
     private Collection $transactions;
 
     public function __construct()

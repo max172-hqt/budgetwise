@@ -3,6 +3,7 @@
 namespace Budgetwise\Http\Controller;
 
 use Budgetwise\Core\AbstractController;
+use Budgetwise\Core\BudgetCalculation;
 use Budgetwise\Entities\Trip;
 use Budgetwise\Entities\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,13 +44,17 @@ class TripController extends AbstractController
             return new Response('You are not authorized to see this page');
         }
 
+        $calculation = new BudgetCalculation($trip);
+
         return $this->render('trip/show.html.twig', [
             'heading' => $trip->getName(),
-            'trip' => $trip
+            'trip' => $trip,
+            'transactions' => $trip->getTransactions(),
+            'budgetTable' => $calculation->budgetTable()
         ]);
     }
 
-    public function create(Request $request): Response
+    public function create(): Response
     {
         $users = $this->entityManager()->getRepository(User::class)->findAll();
 
