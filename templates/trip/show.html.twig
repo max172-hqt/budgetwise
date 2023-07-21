@@ -1,10 +1,11 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <div class="flex gap-8">
-        <div class="flex flex gap-4 flex-col">
+    <div class="flex gap-8 max-h-screen h-[calc(100vh-220px)]">
+        <div class="flex gap-4 flex-col">
             <h1 class="text-xl font-bold">Trip Transactions</h1>
-            <ul role="list" class="divide-y divide-gray-100 bg-white">
+
+            <ul role="list" class="divide-y divide-gray-100 bg-white overflow-y-auto">
                 {% for transaction in transactions %}
                     <div class="flex justify-between gap-x-6 py-5 px-4">
                         <div class="flex gap-x-4">
@@ -22,31 +23,56 @@
             </ul>
         </div>
         <div class="flex flex-grow gap-4 flex-col">
-            <h1 class="text-xl font-bold">Members</h1>
-            {% for user in budgetTable %}
-                <details>
-                    <summary class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer bg-white px-4 py-2">
-                        {{ user.email == currentUser.email ? 'You' : user.email }}
-                        {% if user.own.isNegative %}
-                            <span class="text-red-500 float-right">Owes: {{ user.own.absolute|format_money }}</span>
-                        {% else %}
-                            <span class="text-green-500 float-right">Receives: {{ user.own.absolute|format_money }}</span>
-                        {% endif %}
-                    </summary>
-                    <div class=" bg-white">
-                        {% if resolvedTable[user.email] is empty %}
-                            <p class="leading-6 px-3 py-2 text-gray-800 text-sm">No debt</p>
-                        {% else %}
-                            {% for email, amount in resolvedTable[user.email] %}
-                                <p class="leading-6 px-3 py-2 text-gray-800 text-sm">
-                                    Pay {{ email == currentUser.email ? 'you' : email }}
-                                    <span class="text-red-500 font-bold">{{ amount|format_money }}</span></p>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </details>
-            {% endfor %}
+            <div class="flex gap-4 flex-col">
+                <h1 class="text-xl font-bold">My Summary</h1>
+                {% if resolvedTable[currentUser.email] is empty %}
+                    <p class="leading-6 px-3 py-2 text-gray-800 text-sm">You have no pending debts!</p>
+                {% else %}
+                    <ul role="list" class="divide-y divide-gray-100 bg-white overflow-y-auto flex-grow">
+                        {% for email, amount in resolvedTable[currentUser.email] %}
+                            <div class="flex justify-between gap-x-6 py-5 px-4">
+                                <div class="flex gap-x-4">
+                                    <div class="min-w-0 flex-auto">
+                                        <p class="text-sm leading-6 text-gray-900">You need to
+                                            pay <span class="font-semibold">{{ email }}</span></p>
+                                    </div>
+                                </div>
+                                <div class="hidden sm:flex sm:flex-col sm:items-end">
+                                    <p class="text-sm leading-6 text-gray-900 font-bold text-red-500">{{ amount|format_money }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
 
+            <div class="flex gap-4 flex-col">
+                <h1 class="text-xl font-bold">Members</h1>
+                {% for user in budgetTable %}
+                    <details>
+                        <summary
+                                class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer bg-white px-4 py-2">
+                            {{ user.email == currentUser.email ? 'You - ' ~ user.email : user.email }}
+                            {% if user.own.isNegative %}
+                                <span class="text-red-500 float-right">Owes: {{ user.own.absolute|format_money }}</span>
+                            {% else %}
+                                <span class="text-green-500 float-right">Receives: {{ user.own.absolute|format_money }}</span>
+                            {% endif %}
+                        </summary>
+                        <div class=" bg-white">
+                            {% if resolvedTable[user.email] is empty %}
+                                <p class="leading-6 px-3 py-2 text-gray-800 text-sm">No debt</p>
+                            {% else %}
+                                {% for email, amount in resolvedTable[user.email] %}
+                                    <p class="leading-6 px-3 py-2 text-gray-800 text-sm">
+                                        Pay {{ email == currentUser.email ? 'you' : email }}
+                                        <span class="text-red-500 font-bold">{{ amount|format_money }}</span></p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </details>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

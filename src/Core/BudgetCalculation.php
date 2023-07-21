@@ -112,7 +112,6 @@ class BudgetCalculation
         $resolveTable = [];
 
         while ($start < $end) {
-            dump($resolveTable);
             $owe = $table[$start]['own'];
             $own = $table[$end]['own'];
 
